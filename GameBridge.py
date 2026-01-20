@@ -62,8 +62,12 @@ SYMBOL_TO_INDEX = {
 	"watermelon": 6,
 	"green_apple": 7,
 	"clover": 8,
-	"unknown": 9,      # Null/placeholder in preview
+	"unknown": 9,      # Hidden/unrevealed cell
 	"rainbow": 10,     # Wild symbol
+	# Color placeholders (reveal color but not symbol)
+	"🔴": 11,          # Red placeholder
+	"🟡": 12,          # Yellow placeholder
+	"🟢": 13,          # Green placeholder
 }
 
 # Reverse mapping for debugging
@@ -106,13 +110,15 @@ class GameBridge(Node):
 		return json.dumps(snapshot)
 
 	def start_round(self):
-		"""Start a new round. Returns JSON snapshot."""
+		"""Start a new round. Returns JSON snapshot with preview."""
 		if not self.game:
 			return json.dumps({"error": "no_game"})
 
 		self.game.start_round()
 		self.pending_bet = 0
-		return json.dumps(build_snapshot(self.game, pending_bet=0))
+		snapshot = build_snapshot(self.game, pending_bet=0)
+		snapshot["preview_indices"] = self._preview_to_indices()
+		return json.dumps(snapshot)
 
 	def end_round(self):
 		"""End current round. Returns JSON snapshot."""
@@ -147,7 +153,9 @@ class GameBridge(Node):
 			return json.dumps(snapshot)
 
 		self.pending_bet += 1
-		return json.dumps(build_snapshot(self.game, pending_bet=self.pending_bet))
+		snapshot = build_snapshot(self.game, pending_bet=self.pending_bet)
+		snapshot["preview_indices"] = self._preview_to_indices()
+		return json.dumps(snapshot)
 
 	def remove_token(self):
 		"""
@@ -163,7 +171,9 @@ class GameBridge(Node):
 			return json.dumps(snapshot)
 
 		self.pending_bet -= 1
-		return json.dumps(build_snapshot(self.game, pending_bet=self.pending_bet))
+		snapshot = build_snapshot(self.game, pending_bet=self.pending_bet)
+		snapshot["preview_indices"] = self._preview_to_indices()
+		return json.dumps(snapshot)
 
 	def spin(self):
 		"""
@@ -199,6 +209,7 @@ class GameBridge(Node):
 
 		snapshot = build_snapshot(self.game, pending_bet=self.pending_bet)
 		snapshot["grid_indices"] = self._grid_to_indices()
+		snapshot["preview_indices"] = self._preview_to_indices()
 		return json.dumps(snapshot)
 
 	# ==================== SHOP ====================
@@ -296,6 +307,40 @@ class GameBridge(Node):
 					symbol_name = cell.name if hasattr(cell, 'name') else str(cell)
 					col_tiles.append(SYMBOL_TO_INDEX.get(symbol_name, 9))
 			result.append(col_tiles)
+
+		return result
+
+	def _preview_to_indices(self):
+		"""
+		Convert preview symbols to Godot picture indices.
+		Returns 2D array [col][row] where:
+		- Preview positions show symbol index (or placeholder index)
+		- Non-preview positions show "unknown" (9)
+
+		This shows which cells are "locked" (revealed) vs "hidden" (unknown).
+		"""
+		if not self.game:
+			return []
+
+		# Get grid dimensions
+		rows = self.game.config.grid_rows
+		cols = self.game.config.grid_cols
+
+		# Start with all unknown (hidden cells show question mark)
+		UNKNOWN_INDEX = 9
+		result = [[UNKNOWN_INDEX for _ in range(rows)] for _ in range(cols)]
+
+		# Fill in preview positions with actual symbols
+		preview_symbols = self.game.state.preview_symbols or []
+		preview_positions = self.game.state.preview_positions or []
+
+		for symbol, (row, col) in zip(preview_symbols, preview_positions):
+			if 0 <= col < cols and 0 <= row < rows:
+				if symbol is None:
+					result[col][row] = UNKNOWN_INDEX
+				else:
+					symbol_name = symbol.name if hasattr(symbol, 'name') else str(symbol)
+					result[col][row] = SYMBOL_TO_INDEX.get(symbol_name, UNKNOWN_INDEX)
 
 		return result
 

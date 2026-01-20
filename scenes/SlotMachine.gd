@@ -6,17 +6,21 @@ const SPIN_UP_DISTANCE = 100.0
 signal stopped
 
 @export var pictures := [ # (Array, String)
-	preload("res://sprites/TileIcons/cherry.png"),
-	preload("res://sprites/TileIcons/strawberry.png"),
-	preload("res://sprites/TileIcons/seven.png"),
-	preload("res://sprites/TileIcons/lemon.png"),
-	preload("res://sprites/TileIcons/banana.png"),
-	preload("res://sprites/TileIcons/bell.png"),
-	preload("res://sprites/TileIcons/watermelon.png"),
-	preload("res://sprites/TileIcons/green_apple.png"),
-	preload("res://sprites/TileIcons/clover.png"),
-	preload("res://sprites/TileIcons/unknown.png"),
-	preload("res://sprites/TileIcons/rainbow.png"),
+	preload("res://sprites/TileIcons/cherry.png"),       # 0
+	preload("res://sprites/TileIcons/strawberry.png"),   # 1
+	preload("res://sprites/TileIcons/seven.png"),        # 2
+	preload("res://sprites/TileIcons/lemon.png"),        # 3
+	preload("res://sprites/TileIcons/banana.png"),       # 4
+	preload("res://sprites/TileIcons/bell.png"),         # 5
+	preload("res://sprites/TileIcons/watermelon.png"),   # 6
+	preload("res://sprites/TileIcons/green_apple.png"),  # 7
+	preload("res://sprites/TileIcons/clover.png"),       # 8
+	preload("res://sprites/TileIcons/unknown.png"),      # 9 - hidden/unrevealed
+	preload("res://sprites/TileIcons/rainbow.png"),      # 10 - wild
+	# Color placeholders (TODO: add actual images)
+	preload("res://sprites/TileIcons/unknown.png"),      # 11 - red placeholder 🔴
+	preload("res://sprites/TileIcons/unknown.png"),      # 12 - yellow placeholder 🟡
+	preload("res://sprites/TileIcons/unknown.png"),      # 13 - green placeholder 🟢
 	#preload("res://sprites/TileIcons/bat.png"),
 	#preload("res://sprites/TileIcons/cactus.png"),
 	#preload("res://sprites/TileIcons/card-exchange.png"),
@@ -82,6 +86,8 @@ var grid_pos := []
 @onready var expected_runs :int = int(runtime * speed_norm)
 # Stores the current number of movements per reel
 var tiles_moved_per_reel := []
+# Stores how many tiles have finished per reel
+var tiles_stopped_per_reel := []
 # When force stopped, stores the current number of movements
 var runs_stopped := 0
 # Store the runs independent of how they are achieved
@@ -92,6 +98,7 @@ func _ready():
 	for col in reels:
 		grid_pos.append([])
 		tiles_moved_per_reel.append(0)
+		tiles_stopped_per_reel.append(0)
 		for row in range(rows):
 			# Position extra tiles above and below the viewport
 			grid_pos[col].append(Vector2(col, row-0.5*extra_tiles) * tile_size)
@@ -117,6 +124,9 @@ func start() -> void:
 	if state == State.OFF:
 		state = State.ON
 		total_runs = expected_runs
+		# Reset stopped counters
+		for i in range(reels):
+			tiles_stopped_per_reel[i] = 0
 		# Ask server for result
 		_get_result()
 		# Spins all reels
@@ -139,6 +149,7 @@ func stop():
 func _stop() -> void:
 	for reel in reels:
 		tiles_moved_per_reel[reel] = 0
+		tiles_stopped_per_reel[reel] = 0
 	state = State.OFF
 	emit_signal("stopped")
 
@@ -157,8 +168,9 @@ func _move_tile(tile :SlotTile) -> void:
 	# The reel will move further through the _on_tile_moved function
 
 func _on_tile_moved(tile: SlotTile) -> void:
-	# Calculates the reel that the tile is on
-	var reel := int(tile.position.x / tile_size.x)
+	# Calculates the reel that the tile is on (use round to avoid floating point issues)
+	var reel := int(round(tile.position.x / tile_size.x))
+
 	# Count how many tiles moved per reel
 	tiles_moved_per_reel[reel] += 1
 	var reel_runs := current_runs(reel)
@@ -185,8 +197,9 @@ func _on_tile_moved(tile: SlotTile) -> void:
 		tile.move_by(Vector2(0, tile_size.y))
 	else: # stop moving this reel
 		tile.spin_down()
-		# When last reel stopped, machine is stopped
-		if reel == reels - 1:
+		tiles_stopped_per_reel[reel] += 1
+		# When ALL tiles in the last reel have stopped, machine is stopped
+		if reel == reels - 1 and tiles_stopped_per_reel[reel] >= rows:
 			_stop()
 
 # Divide it by the number of tiles to know how often the whole reel moved
@@ -228,3 +241,41 @@ func _get_random_result() -> void:
 			reel_tiles.append(randi() % pictures.size())
 		tiles_array.append(reel_tiles)
 	result = { "tiles": tiles_array }
+
+# Show preview grid (before spin) - displays locked/revealed symbols
+func show_preview() -> void:
+	if not game_bridge:
+		print("[SlotMachine] No bridge for preview")
+		return
+
+	# Get current snapshot with preview_indices
+	var json_str = game_bridge.get_snapshot()
+	var snapshot = JSON.parse_string(json_str)
+
+	if snapshot.has("error"):
+		print("[SlotMachine] Preview error: ", snapshot.error)
+		return
+
+	if not snapshot.has("preview_indices"):
+		print("[SlotMachine] No preview_indices in snapshot")
+		return
+
+	var preview = snapshot.preview_indices  # [col][row] format
+	last_snapshot = snapshot
+
+	# Set each visible tile to show preview
+	# Visible rows start at extra_tiles/2
+	var visible_start = int(extra_tiles / 2)
+
+	for col in range(min(reels, preview.size())):
+		var col_data = preview[col]
+		for row in range(min(tiles_per_reel, col_data.size())):
+			var tile_row = visible_start + row
+			var tile = get_tile(col, tile_row)
+			var pic_index = col_data[row]
+			if pic_index >= 0 and pic_index < pictures.size():
+				tile.set_texture(pictures[pic_index])
+			else:
+				tile.set_texture(pictures[9])  # unknown
+
+	print("[SlotMachine] Preview shown")
