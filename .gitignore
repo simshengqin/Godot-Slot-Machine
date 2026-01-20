@@ -1,4 +1,5 @@
 .import
 .vscode
-*.import.godot/
+*.import
+.godot/
 bug.png
