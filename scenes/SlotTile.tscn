@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://cxjxp026tly0e"]
 
-[ext_resource type="Texture2D" path="res://sprites/TileIcons/bat.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://b8rg4pxphso1x" path="res://sprites/TileIcons/banana.png" id="1"]
 [ext_resource type="Script" uid="uid://1pehbhuwvywd" path="res://scenes/SlotTile.gd" id="2"]
 
 [sub_resource type="Animation" id="1"]

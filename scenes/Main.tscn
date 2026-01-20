@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://dko61eh82dii6"]
+[gd_scene load_steps=7 format=3 uid="uid://dko61eh82dii6"]
 
 [ext_resource type="Script" uid="uid://cwg4dgh82v7yx" path="res://scenes/SlotMachine.gd" id="1"]
 [ext_resource type="FontFile" uid="uid://cxgscrjbvg6sg" path="res://fonts/Symtext.ttf" id="2"]
 [ext_resource type="Texture2D" uid="uid://nspo48vpm3d6" path="res://sprites/background.png" id="2_rarhs"]
 [ext_resource type="Script" uid="uid://mqrod3f1d74n" path="res://scenes/Main.gd" id="3"]
+[ext_resource type="Script" path="res://GameBridge.py" id="4"]
 
 [sub_resource type="FontFile" id="3"]
 fallbacks = Array[Font]([ExtResource("2")])
@@ -43,5 +44,8 @@ render_target_update_mode = 4
 
 [node name="SlotMachine" type="Node2D" parent="SubViewportContainer/SubViewport"]
 script = ExtResource("1")
+
+[node name="GameBridge" type="Node" parent="."]
+script = ExtResource("4")
 
 [connection signal="button_down" from="Roll" to="." method="_on_Roll_button_down"]

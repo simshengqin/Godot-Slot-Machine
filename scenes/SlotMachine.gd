@@ -16,8 +16,7 @@ signal stopped
 	preload("res://sprites/TileIcons/green_apple.png"),
 	preload("res://sprites/TileIcons/clover.png"),
 	preload("res://sprites/TileIcons/unknown.png"),
-	
-	#preload("res://sprites/TileIcons/rainbow.png"),
+	preload("res://sprites/TileIcons/rainbow.png"),
 	#preload("res://sprites/TileIcons/bat.png"),
 	#preload("res://sprites/TileIcons/cactus.png"),
 	#preload("res://sprites/TileIcons/card-exchange.png"),
@@ -67,6 +66,11 @@ signal stopped
 enum State {OFF, ON, STOPPED}
 var state = State.OFF
 var result := {}
+
+# Reference to GameBridge (set by Main.gd)
+var game_bridge = null
+# Latest snapshot from Python backend
+var last_snapshot = {}
 
 # Stores SlotTile instances
 var tiles := []
@@ -195,6 +199,28 @@ func _randomTexture() -> Texture2D:
 	return pictures[randi() % pictures.size()]
 
 func _get_result() -> void:
+	if game_bridge:
+		# Get result from Python backend
+		var json_str = game_bridge.spin()
+		last_snapshot = JSON.parse_string(json_str)
+
+		if last_snapshot.has("error"):
+			print("[SlotMachine] Error: ", last_snapshot.error)
+			# Fallback to random
+			_get_random_result()
+		elif last_snapshot.has("grid_indices"):
+			# Use grid from Python backend
+			result = { "tiles": last_snapshot.grid_indices }
+			print("[SlotMachine] Got result from Python backend")
+		else:
+			print("[SlotMachine] No grid_indices in snapshot, using random")
+			_get_random_result()
+	else:
+		print("[SlotMachine] No bridge, using random result")
+		_get_random_result()
+
+func _get_random_result() -> void:
+	# Fallback: generate random result (original behavior)
 	var tiles_array := []
 	for reel in reels:
 		var reel_tiles := []
@@ -202,6 +228,3 @@ func _get_result() -> void:
 			reel_tiles.append(randi() % pictures.size())
 		tiles_array.append(reel_tiles)
 	result = { "tiles": tiles_array }
-
-	# Rig specific position: col 0, row 1 = bat (index 0)
-	result.tiles[0][1] = 0
