@@ -48,4 +48,256 @@ script = ExtResource("1")
 [node name="GameBridge" type="Node" parent="."]
 script = ExtResource("4")
 
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+
+[node name="ScoreOverlay" type="Panel" parent="UI"]
+layout_mode = 0
+offset_left = 751.0
+offset_top = 165.0
+offset_right = 1161.0
+offset_bottom = 210.0
+
+[node name="ScoreLabel" type="Label" parent="UI/ScoreOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 28
+text = "SCORE: 012450"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PayTableOverlay" type="Panel" parent="UI"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 320.0
+offset_right = 300.0
+offset_bottom = 480.0
+
+[node name="PayTableTitle" type="Label" parent="UI/PayTableOverlay"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 199.0
+offset_bottom = 30.0
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 16
+text = "PAY TABLE"
+
+[node name="PayRow0" type="Label" parent="UI/PayTableOverlay"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 35.0
+offset_right = 199.0
+offset_bottom = 60.0
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 16
+text = "🔔  🎲+3  💰260"
+
+[node name="PayRow1" type="Label" parent="UI/PayTableOverlay"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 65.0
+offset_right = 199.0
+offset_bottom = 90.0
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 16
+text = "7️⃣  🎲+1  💰7777"
+
+[node name="PayRow2" type="Label" parent="UI/PayTableOverlay"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 95.0
+offset_right = 199.0
+offset_bottom = 120.0
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 16
+text = "☘️  🎲-1  💰120"
+
+[node name="RoundOverlay" type="Panel" parent="UI"]
+layout_mode = 0
+offset_left = 1625.0
+offset_top = 320.0
+offset_right = 1830.0
+offset_bottom = 480.0
+
+[node name="RoundLabel" type="Label" parent="UI/RoundOverlay"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 200.0
+offset_bottom = 35.0
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 18
+text = "Round 1"
+horizontal_alignment = 1
+
+[node name="QuotaLabel" type="Label" parent="UI/RoundOverlay"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 45.0
+offset_right = 200.0
+offset_bottom = 95.0
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 28
+text = "20000"
+horizontal_alignment = 1
+
+[node name="DeadlineLabel" type="Label" parent="UI/RoundOverlay"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 100.0
+offset_right = 200.0
+offset_bottom = 125.0
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 14
+text = "Deadline 1 | Spins: 0"
+horizontal_alignment = 1
+
+[node name="JokersTitle" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = 580.0
+offset_top = 50.0
+offset_right = 780.0
+offset_bottom = 80.0
+theme_override_font_sizes/font_size = 18
+text = "RELICS"
+
+[node name="JokersContainer" type="HBoxContainer" parent="UI"]
+layout_mode = 0
+offset_left = 580.0
+offset_top = 85.0
+offset_right = 980.0
+offset_bottom = 145.0
+
+[node name="TarotsTitle" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = 1180.0
+offset_top = 50.0
+offset_right = 1450.0
+offset_bottom = 80.0
+theme_override_font_sizes/font_size = 18
+text = "CONSUMABLES"
+
+[node name="TarotsContainer" type="HBoxContainer" parent="UI"]
+layout_mode = 0
+offset_left = 1180.0
+offset_top = 85.0
+offset_right = 1580.0
+offset_bottom = 145.0
+
+[node name="Tooltip" type="Panel" parent="UI"]
+visible = false
+layout_mode = 0
+offset_left = 700.0
+offset_top = 150.0
+offset_right = 1100.0
+offset_bottom = 350.0
+
+[node name="TooltipName" type="Label" parent="UI/Tooltip"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 390.0
+offset_bottom = 45.0
+theme_override_font_sizes/font_size = 22
+text = "Joker Name"
+
+[node name="TooltipDesc" type="Label" parent="UI/Tooltip"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 50.0
+offset_right = 390.0
+offset_bottom = 190.0
+theme_override_font_sizes/font_size = 16
+text = "Description goes here..."
+autowrap_mode = 2
+
+[node name="InfoPanel" type="Panel" parent="UI"]
+visible = false
+layout_mode = 0
+offset_left = 400.0
+offset_top = 150.0
+offset_right = 1520.0
+offset_bottom = 900.0
+
+[node name="InfoTitle" type="Label" parent="UI/InfoPanel"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 1080.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 28
+text = "GAME INFO"
+
+[node name="InfoContent" type="VBoxContainer" parent="UI/InfoPanel"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 70.0
+offset_right = 1080.0
+offset_bottom = 700.0
+
+[node name="CloseButton" type="Button" parent="UI/InfoPanel"]
+layout_mode = 0
+offset_left = 1040.0
+offset_top = 20.0
+offset_right = 1100.0
+offset_bottom = 55.0
+text = "X"
+
+[node name="BottomPanel" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 580.0
+offset_top = 960.0
+offset_right = 1580.0
+offset_bottom = 1050.0
+mouse_filter = 2
+
+[node name="TokensLabel" type="Label" parent="BottomPanel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 250.0
+offset_bottom = 50.0
+theme_override_font_sizes/font_size = 24
+text = "Tokens: 10"
+
+[node name="BetLabel" type="Label" parent="BottomPanel"]
+layout_mode = 0
+offset_left = 280.0
+offset_top = 10.0
+offset_right = 480.0
+offset_bottom = 50.0
+theme_override_font_sizes/font_size = 24
+text = "Bet: 0"
+
+[node name="MoneyLabel" type="Label" parent="BottomPanel"]
+layout_mode = 0
+offset_left = 520.0
+offset_top = 10.0
+offset_right = 750.0
+offset_bottom = 50.0
+theme_override_font_sizes/font_size = 24
+text = "Money: $0"
+
+[node name="InfoButton" type="Button" parent="BottomPanel"]
+layout_mode = 0
+offset_left = 800.0
+offset_top = 5.0
+offset_right = 980.0
+offset_bottom = 55.0
+theme_override_font_sizes/font_size = 20
+text = "Info (I)"
+
 [connection signal="button_down" from="Roll" to="." method="_on_Roll_button_down"]
+[connection signal="pressed" from="UI/InfoPanel/CloseButton" to="." method="_on_info_close_pressed"]
+[connection signal="pressed" from="BottomPanel/InfoButton" to="." method="_on_info_button_pressed"]
