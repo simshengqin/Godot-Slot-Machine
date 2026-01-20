@@ -6,33 +6,45 @@ const SPIN_UP_DISTANCE = 100.0
 signal stopped
 
 @export var pictures := [ # (Array, String)
-	preload("res://sprites/TileIcons/bat.png"),
-	preload("res://sprites/TileIcons/cactus.png"),
-	preload("res://sprites/TileIcons/card-exchange.png"),
-	preload("res://sprites/TileIcons/card-joker.png"),
-	preload("res://sprites/TileIcons/chess-knight.png"),
-	preload("res://sprites/TileIcons/coffee-cup.png"),
-	preload("res://sprites/TileIcons/companion-cube.png"),
-	preload("res://sprites/TileIcons/cycling.png"),
-	preload("res://sprites/TileIcons/dandelion-flower.png"),
-	preload("res://sprites/TileIcons/eight-ball.png"),
-	preload("res://sprites/TileIcons/hummingbird.png"),
-	preload("res://sprites/TileIcons/kiwi-bird.png"),
-	preload("res://sprites/TileIcons/owl.png"),
-	preload("res://sprites/TileIcons/pc.png"),
-	preload("res://sprites/TileIcons/pie-slice.png"),
-	preload("res://sprites/TileIcons/plastic-duck.png"),
-	preload("res://sprites/TileIcons/raven.png"),
-	preload("res://sprites/TileIcons/rolling-dices.png"),
-	preload("res://sprites/TileIcons/skull-crossed-bones.png"),
-	preload("res://sprites/TileIcons/super-mushroom.png"),
-	preload("res://sprites/TileIcons/tic-tac-toe.png"),
-	preload("res://sprites/TileIcons/trojan-horse.png"),
-	preload("res://sprites/TileIcons/udder.png")
+	preload("res://sprites/TileIcons/cherry.png"),
+	preload("res://sprites/TileIcons/strawberry.png"),
+	preload("res://sprites/TileIcons/seven.png"),
+	preload("res://sprites/TileIcons/lemon.png"),
+	preload("res://sprites/TileIcons/banana.png"),
+	preload("res://sprites/TileIcons/bell.png"),
+	preload("res://sprites/TileIcons/watermelon.png"),
+	preload("res://sprites/TileIcons/green_apple.png"),
+	preload("res://sprites/TileIcons/clover.png"),
+	preload("res://sprites/TileIcons/unknown.png"),
+	
+	#preload("res://sprites/TileIcons/rainbow.png"),
+	#preload("res://sprites/TileIcons/bat.png"),
+	#preload("res://sprites/TileIcons/cactus.png"),
+	#preload("res://sprites/TileIcons/card-exchange.png"),
+	#preload("res://sprites/TileIcons/card-joker.png"),
+	#preload("res://sprites/TileIcons/chess-knight.png"),
+	#preload("res://sprites/TileIcons/coffee-cup.png"),
+	#preload("res://sprites/TileIcons/companion-cube.png"),
+	#preload("res://sprites/TileIcons/cycling.png"),
+	#preload("res://sprites/TileIcons/dandelion-flower.png"),
+	#preload("res://sprites/TileIcons/eight-ball.png"),
+	#preload("res://sprites/TileIcons/hummingbird.png"),
+	#preload("res://sprites/TileIcons/kiwi-bird.png"),
+	#preload("res://sprites/TileIcons/owl.png"),
+	#preload("res://sprites/TileIcons/pc.png"),
+	#preload("res://sprites/TileIcons/pie-slice.png"),
+	#preload("res://sprites/TileIcons/plastic-duck.png"),
+	#preload("res://sprites/TileIcons/raven.png"),
+	#preload("res://sprites/TileIcons/rolling-dices.png"),
+	#preload("res://sprites/TileIcons/skull-crossed-bones.png"),
+	#preload("res://sprites/TileIcons/super-mushroom.png"),
+	#preload("res://sprites/TileIcons/tic-tac-toe.png"),
+	#preload("res://sprites/TileIcons/trojan-horse.png"),
+	#preload("res://sprites/TileIcons/udder.png")
 ]
 
 @export var reels := 5 # (int,1,20)
-@export var tiles_per_reel := 4 # (int,1,20)
+@export var tiles_per_reel := 3 # (int,1,20)
 # Defines how long the reels are spinning
 @export var runtime := 1.0 # (float,0,10)
 # Defines how fast the reels are spinning
@@ -190,3 +202,6 @@ func _get_result() -> void:
 			reel_tiles.append(randi() % pictures.size())
 		tiles_array.append(reel_tiles)
 	result = { "tiles": tiles_array }
+
+	# Rig specific position: col 0, row 1 = bat (index 0)
+	result.tiles[0][1] = 0

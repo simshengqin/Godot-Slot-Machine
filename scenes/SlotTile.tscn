@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3 uid="uid://cxjxp026tly0e"]
 
 [ext_resource type="Texture2D" path="res://sprites/TileIcons/bat.png" id="1"]
-[ext_resource type="Script" path="res://scenes/SlotTile.gd" id="2"]
+[ext_resource type="Script" uid="uid://1pehbhuwvywd" path="res://scenes/SlotTile.gd" id="2"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "SPIN_DOWN"
@@ -36,8 +36,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="3"]
 _data = {
-"SPIN_DOWN": SubResource("1"),
-"SPIN_UP": SubResource("2")
+&"SPIN_DOWN": SubResource("1"),
+&"SPIN_UP": SubResource("2")
 }
 
 [node name="SlotWheel" type="Node2D"]
@@ -50,5 +50,5 @@ centered = false
 
 [node name="Animations" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("3")
+&"": SubResource("3")
 }
