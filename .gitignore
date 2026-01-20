@@ -8,8 +8,7 @@ bug.png
 __pycache__/
 *.pyc
 
-# Game data (generated)
-cache/
+# Runtime data (not tracked)
 saves/
 
 # py4godot addon (download from https://github.com/niklas2902/py4godot/releases)

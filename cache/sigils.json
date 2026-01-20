@@ -1,0 +1,93 @@
+{
+  "timestamp": "2026-01-20T23:52:08.482466",
+  "data": [
+    {
+      "Name": "Sigil of Adjustment",
+      "Description": "Choose 2 of 7 cards. Increase or decrease their rank by 1.",
+      "Include": "Y",
+      "pool_size": "7",
+      "cards_to_select": "2",
+      "requires_two_decks": "N"
+    },
+    {
+      "Name": "Sigil of Ascent",
+      "Description": "Choose 1 of 7 cards. Increase its rank by 2.",
+      "Include": "Y",
+      "pool_size": "7",
+      "cards_to_select": "1",
+      "requires_two_decks": "N"
+    },
+    {
+      "Name": "Sigil of Echo",
+      "Description": "Choose 1 of 7 cards. Duplicate it to another deck.",
+      "Include": "Y",
+      "pool_size": "7",
+      "cards_to_select": "1",
+      "requires_two_decks": "Y"
+    },
+    {
+      "Name": "Sigil of Erasure",
+      "Description": "Choose 1 of 7 cards. Remove them permanently.",
+      "Include": "Y",
+      "pool_size": "7",
+      "cards_to_select": "1",
+      "requires_two_decks": "N"
+    },
+    {
+      "Name": "Sigil of Collapse",
+      "Description": "Remove 3 random cards from this deck.",
+      "Include": "N",
+      "pool_size": "0",
+      "cards_to_select": "0",
+      "requires_two_decks": "N"
+    },
+    {
+      "Name": "Sigil of Passage",
+      "Description": "Choose 1 of 7 cards. Transfer it permanently to a chosen deck.",
+      "Include": "Y",
+      "pool_size": "7",
+      "cards_to_select": "1",
+      "requires_two_decks": "Y"
+    },
+    {
+      "Name": "Sigil of Migration",
+      "Description": "Transfer 2 random cards from this deck to the other deck.",
+      "Include": "Y",
+      "pool_size": "0",
+      "cards_to_select": "0",
+      "requires_two_decks": "Y"
+    },
+    {
+      "Name": "Sigil of Alignment \u2013 Hearts",
+      "Description": "Choose 2 of 7 cards. Convert them to Hearts.",
+      "Include": "Y",
+      "pool_size": "7",
+      "cards_to_select": "2",
+      "requires_two_decks": "N"
+    },
+    {
+      "Name": "Sigil of Alignment \u2013 Spades",
+      "Description": "Choose 2 of 7 cards. Convert them to Spades.",
+      "Include": "Y",
+      "pool_size": "7",
+      "cards_to_select": "2",
+      "requires_two_decks": "N"
+    },
+    {
+      "Name": "Sigil of Alignment \u2013 Clubs",
+      "Description": "Choose 2 of 7 cards. Convert them to Clubs.",
+      "Include": "Y",
+      "pool_size": "7",
+      "cards_to_select": "2",
+      "requires_two_decks": "N"
+    },
+    {
+      "Name": "Sigil of Alignment \u2013 Diamonds",
+      "Description": "Choose 2 of 7 cards. Convert them to Diamonds.",
+      "Include": "Y",
+      "pool_size": "7",
+      "cards_to_select": "2",
+      "requires_two_decks": "N"
+    }
+  ]
+}

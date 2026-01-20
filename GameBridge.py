@@ -12,6 +12,7 @@ Usage in Godot:
 
 import sys
 import json
+from pathlib import Path
 
 # Add twin-hands to Python path
 # TODO: Update this path for production/distribution
@@ -22,7 +23,28 @@ if TWIN_HANDS_PATH not in sys.path:
 from py4godot.classes import gdclass
 from py4godot.classes.Node import Node
 
-# Import backend
+# Use offline cache for fast startup (no network calls)
+from src.utils.data.game_data_source import CacheFileDataSource
+from src.utils.data.game_data_registry import GameDataRegistry
+
+# Set cache path - try multiple locations for dev and export
+CACHE_PATH = None
+for path in [
+	Path(__file__).parent / "cache",  # Next to GameBridge.py (works in export)
+	Path("cache"),  # Relative to cwd
+	Path("C:/Users/User/Documents/GitHub/Godot-Slot-Machine/cache"),  # Dev fallback
+]:
+	if path.exists():
+		CACHE_PATH = path
+		break
+
+if CACHE_PATH:
+	GameDataRegistry.set_data_source(CacheFileDataSource(str(CACHE_PATH)))
+	print("[GameBridge] USING OFFLINE CACHE (fast)")
+else:
+	print("[GameBridge] WARNING: Cache not found, using Google Sheets (SLOW!)")
+
+# Import backend (after setting data source)
 from src.managers.system.game_manager import GameManager
 from src.resources.poker_grid_config import PokerGridConfig
 from src.api.game_adapter import build_snapshot
